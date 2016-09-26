@@ -1,20 +1,20 @@
 ;; Locate the OPML import backend
 (setq opml2org (locate-file "opml2org.py" load-path))
 
-(defun opml-decode (begin end)
-  (call-process-region
-   (point-min) (point-max)
-   opml2org
-   ;; three 't's = redisplay buffer with processed text
-   t t t))
+;; (defun opml-decode (begin end)
+;;  (call-process-region
+;;   (point-min) (point-max)
+;;   opml2org
+;;   ;; three 't's = redisplay buffer with processed text
+;;   t t t))
 
 ;; Define the format conversion going to and from Org mode/OPML.
 (add-to-list
  'format-alist
- '(opml
+ `(opml
    "Outline Processor Markup Language"
    "<[?]xml version=\"1.0\"[^>]*[?]>[\n]?.*[\n]?.*[\n]?<opml version=\"[1|2].0\">"
-   opml-decode
+   ,opml2org
    opml-encode
    t))
 
