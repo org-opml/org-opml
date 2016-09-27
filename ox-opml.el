@@ -135,6 +135,14 @@ contextual information."
   (let* ((p (car (org-element-contents item)))
   	 (elements (org-element-contents p))
   	 (text (mapconcat
+                ;TODO:LT:2016/09/27 this part of code needs rework,
+                ;formatting should be handled by the appropriate
+                ;formating functions alone and not separately
+                ;here. The whole process of how to reformat the items
+                ;needs rethink. Currently we go over one word a time,
+                ;and use cond to format them accordingly, this
+                ;requires working on all possible conditions of
+                ;different org element types, not ideal!
   	        (lambda (el)
   	          (cond ((stringp el) (clean-text el))
   	        	((equal (car el) 'link)
