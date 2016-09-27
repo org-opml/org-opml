@@ -198,7 +198,7 @@ contextual information."
    (org-opml-add-header :opml-owner-id info "ownerId")
    (org-opml-add-timestamp-headers)
    (org-opml-add-header :opml-link info "link")
-   "<generator>https://github.com/edavis/org-opml</generator>"
+   "<generator>https://github.com/org-opml</generator>"
    "<docs>http://dev.opml.org/spec2.html</docs>"
    "</head>"
    "<body>"
