@@ -1,4 +1,4 @@
-* org-opml
+#+TITLE: org-opml
 
 =org-opml= lets you edit OPML files using Org mode in Emacs.
 
@@ -29,7 +29,7 @@ I find this to be the best of both worlds. You get all the power of
 Emacs/Org mode to edit your outlines while the resulting file can be
 parsed using standard XML/OPML libraries.
 
-** Features
+* Features
 
 - Handles headlines, plain list items, and paragraphs
 - HTML entities (<, >, &, etc.) are safely escaped
@@ -37,7 +37,11 @@ parsed using standard XML/OPML libraries.
 - Uses standard [[http://orgmode.org/org.html#Export-settings][export settings]] in the =<head>= element
 - Follows the OPML 2.0 [[http://dev.opml.org/spec2.html][specification]]
 
-** Installation
+* Installation
+
+Until we get this on MELPA, you have a few options:
+
+** Manually
 
 1) Copy =org-opml.el= and =ox-opml.el= into a directory in your =load-path=
 2) Update the path to =opml2org.py=, if necessary
@@ -46,10 +50,26 @@ parsed using standard XML/OPML libraries.
    C-e=. Everything in =org-opml.el= will now be evaluated and you
    should be ready to start using it.
 
-I have to think this can be simplified. If you know a better way to do
-this, please let me know.
+** With el-get
 
-** How it works
+From [[https://github.com/org-opml/org-opml/issues/1#issuecomment-250941990][caiorss on GitHub]]:
+
+1. Install el-get
+2. Execute this code in the scratch buffer to install the package. It is already the recipe.
+#+BEGIN_SRC elisp
+;; Install https://github.com/org-opml/org-opml
+(el-get-bundle org-opml
+  :type github
+  :pkgname     "org-opml/org-opml"
+  :description "org-opml lets you edit OPML files using Org mode in Emacs."
+  )
+#+END_SRC
+3. Then add this line to ~/emacs.d/.init.el
+#+BEGIN_SRC elisp
+(load-library "org-opml")
+#+END_SRC
+
+* How it works
 
 =org-opml= consists of three files:
 
