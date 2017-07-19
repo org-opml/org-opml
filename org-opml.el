@@ -46,3 +46,5 @@ don't yet contain the `format-alist' regexp pattern."
     (erase-buffer)
     (insert-buffer-substring (get-buffer name))
     (point-max)))
+
+(provide 'org-opml)
