@@ -9,8 +9,7 @@
                    (point-min) (point-max)
                    opml2org
                    ;; three 't's = redisplay current buffer with processed text
-                   t t t
-                   )))
+                   t t t)))
       (cond ((eq status 0)
              ;; on success, return end point
              (point-max))
