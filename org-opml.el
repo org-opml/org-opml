@@ -1,22 +1,22 @@
 ;; Locate the OPML import backend
 (setq opml2org (locate-file "opml2org.py" load-path))
 
-;; (defun opml-decode (begin end)
-;;  (call-process-region
-;;   (point-min) (point-max)
-;;   opml2org
-;;   ;; three 't's = redisplay buffer with processed text
-;;   t t t))
+;;;###autoload
+(defun opml-decode (begin end)
+  (if (eq opml2org nil)
+    (error "Could not locate opml2org.py. Make sure it's in `load-path'.")
+    (let ((status (call-process-region
+                   (point-min) (point-max)
+                   opml2org
+                   ;; three 't's = redisplay current buffer with processed text
+                   t t t
+                   )))
+      (cond ((eq status 0)
+             ;; on success, return end point
+             (point-max))
 
-;; Define the format conversion going to and from Org mode/OPML.
-(add-to-list
- 'format-alist
- `(opml
-   "Outline Processor Markup Language"
-   "<[?]xml version=\"1.0\"[^>]*[?]>[\n]?.*[\n]?.*[\n]?<opml version=\"[1|2].0\">"
-   ,opml2org
-   opml-encode
-   t))
+            (t ;; otherwise, signal an error
+             (error "Could not call opml2org.py."))))))
 
 ;; If it ends with .opml, use `opml-encode' when saving.
 (defun set-buffer-file-format-to-opml ()
@@ -34,10 +34,9 @@ don't yet contain the `format-alist' regexp pattern."
 ;; Activate org-mode when opening OPML files.
 (add-to-list 'auto-mode-alist '("\\.opml\\'" . org-mode))
 
-;; Load the OPML export backend.
 (load-library "ox-opml")
 
-;; The function called when converting from Org mode to OPML.
+;;;###autoload
 (defun opml-encode (begin end buffer)
   "Export Org mode buffer to OPML."
   (let ((org-export-show-temporary-export-buffer nil)
@@ -46,5 +45,14 @@ don't yet contain the `format-alist' regexp pattern."
     (erase-buffer)
     (insert-buffer-substring (get-buffer name))
     (point-max)))
+
+;; Define the format conversion going to and from Org mode/OPML.
+(add-to-list 'format-alist
+             '(opml
+               "Outline Processor Markup Language"
+               "<[?]xml version=\"1.0\"[^>]*[?]>[\n]?.*[\n]?.*[\n]?<opml version=\"[1|2].0\">"
+               opml-decode
+               opml-encode
+               t))
 
 (provide 'org-opml)
