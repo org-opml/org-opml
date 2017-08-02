@@ -32,7 +32,7 @@ don't yet contain the `format-alist' regexp pattern."
 (add-hook 'find-file-hooks 'set-buffer-file-format-to-opml)
 
 ;; Activate org-mode when opening OPML files.
-(add-to-list 'auto-mode-alist '("\\.opml$" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.opml\\'" . org-mode))
 
 ;; Load the OPML export backend.
 (load-library "ox-opml")
