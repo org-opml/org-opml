@@ -56,19 +56,33 @@ From [[https://github.com/org-opml/org-opml/issues/1#issuecomment-250941990][cai
 
 1. Install el-get
 2. Execute this code in the scratch buffer to install the package. It is already the recipe.
-#+BEGIN_SRC elisp
+#+BEGIN_EXAMPLE emacs-lisp
 ;; Install https://github.com/org-opml/org-opml
 (el-get-bundle org-opml
   :type github
   :pkgname     "org-opml/org-opml"
   :description "org-opml lets you edit OPML files using Org mode in Emacs."
   )
-#+END_SRC
+#+END_EXAMPLE
 3. Then add this line to ~/emacs.d/.init.el
-#+BEGIN_SRC elisp
+#+BEGIN_EXAMPLE emacs-lisp
 (load-library "org-opml")
-#+END_SRC
+#+END_EXAMPLE
+** With use-package
+Clone this git repo somewhere, such as =/home/user/org-opml/=, then add the
+following lines to your Elisp:
 
+#+BEGIN_EXAMPLE emacs-lisp
+(setq org-opml-src "/home/user/org-opml/")
+
+(use-package ox-opml
+  :ensure t
+  :load-path org-opml-src)
+
+(use-package org-opml
+  :ensure t
+  :load-path org-opml-src)
+#+END_EXAMPLE
 * How it works
 
 =org-opml= consists of three files:
@@ -79,5 +93,5 @@ From [[https://github.com/org-opml/org-opml/issues/1#issuecomment-250941990][cai
 - *org-opml.el* handles all the necessary configuration.
 
 Also, as =ox-opml.el= is built using Org mode's export dispatcher, you
-can perform a one-way Org mode -> OPML export by typing =C-x C-e m= in
+can perform a one-way Org mode -> OPML export by typing =C-c C-e m= in
 an open Org mode file.
