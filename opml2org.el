@@ -39,11 +39,12 @@ header line. If the header element is not present, returns nil.
   (car (cdr (cddddr (car root)))))
 
 
-(defun printf (s vals)
+(defun printf (s &rest vals)
   "For development only."
-  (print (format s vals)))
+  (print (apply 'format (cons s vals))))
 
 
+;; FIXME: need to detect outline-depth and left-pad the outline appropriately
 (defun format-as-org (node)
   (when node
     (let* ((attrs (xml-node-attributes node))
@@ -53,19 +54,18 @@ header line. If the header element is not present, returns nil.
        ((null text)
         (error (concat "Missing text attribute: " node)))
 
+       ((equal structure "headline")
+        (printf "* %s" text))
+
        ((equal structure "paragraph")
         (printf "%s\n" text))
 
-       ((equal structure "headline")
-        ;; FIXME: headline-depth
-        (printf "* %s" text))
-
        ((equal structure "list")
-        ;; FIXME: list-depth
         (printf "- %s" text))
 
+       ;; Assume a list item if there is no structure.
        (t
-        (printf "Unknown! Structure: %s | Text: %s." structure text))))))
+        (printf "- %s" text))))))
 
 
 (defun process-body (ls &optional data)
@@ -89,4 +89,8 @@ header line. If the header element is not present, returns nil.
 
 (defun test ()
   (let ((body (get-body (parse-opml-from-file "examples/attributes.opml"))))
+    (process-body body)))
+
+(defun test-nba ()
+  (let ((body (get-body (parse-opml-from-file "examples/nba.opml"))))
     (process-body body)))
