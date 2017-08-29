@@ -7,6 +7,7 @@ opml2org.py -- convert OPML to Org mode
 import sys
 import xml.etree.ElementTree as ET
 
+
 class opmlDataObject:
 
     def __init__(self):
@@ -14,13 +15,23 @@ class opmlDataObject:
         self.headlineDepth = 1
         self.listDepth = 0
 
+
 def process_body(element, data=False):
+    """
+    Main work function.
+    """
+    # guard
     if not data:
         data = opmlDataObject()
+
+    # main processing loop
     for outline in element:
         attrib = outline.attrib.copy()
         assert 'text' in attrib, 'missing text attribute'
         text = attrib.pop('text')
+
+        # ensure 'structure' is pre-determined in the outline attributes,
+        # otherwise do some guessing to figure out the structure
         if 'structure' in attrib:
             structure = attrib.pop('structure')
         else:
@@ -33,6 +44,7 @@ def process_body(element, data=False):
             else:
                 structure = 'paragraph'
 
+        # switch on the structure type
         if structure == 'headline':
             yield '%s %s' % ('*' * data.headlineDepth, text)
             if attrib:
@@ -55,9 +67,14 @@ def process_body(element, data=False):
         elif structure == 'paragraph':
             yield '%s\n' % text
 
+
 def extract_header(head, tag, export_tag=None):
+    """
+    Get a header element from OPML and return an org-mode header line.
+    """
     if head.find(tag) is not None and head.find(tag).text:
         return '#+%s: %s' % (export_tag or tag.upper(), head.find(tag).text)
+
 
 if __name__ == '__main__':
     head, body = ET.fromstring(sys.stdin.read())
